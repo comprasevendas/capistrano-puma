@@ -35,7 +35,7 @@ namespace :puma do
   task :start do
     on roles (fetch(:puma_role)) do
       within current_path do
-        with rack_env: fetch(:puma_env) do
+        with rails_env: fetch(:puma_env) do
 
           execute :bundle, 'exec', :puma, "-C #{fetch(:puma_conf)}"
         end
@@ -48,7 +48,7 @@ namespace :puma do
     task command do
       on roles (fetch(:puma_role)) do
         within current_path do
-          with rack_env: fetch(:puma_env) do
+          with rails_env: fetch(:puma_env) do
             if test "[ -f #{fetch(:puma_pid)} ]"
               if test "kill -0 $( cat #{fetch(:puma_pid)} )"
                 execute :bundle, 'exec', :pumactl, "-S #{fetch(:puma_state)} #{command}"
@@ -71,7 +71,7 @@ namespace :puma do
     task command do
       on roles (fetch(:puma_role)) do
         within current_path do
-          with rack_env: fetch(:puma_env) do
+          with rails_env: fetch(:puma_env) do
             if test "[ -f #{fetch(:puma_pid)} ]" and test "kill -0 $( cat #{fetch(:puma_pid)} )"
               # NOTE pid exist but state file is nonsense, so ignore that case
               execute :bundle, 'exec', :pumactl, "-S #{fetch(:puma_state)} #{command}"
